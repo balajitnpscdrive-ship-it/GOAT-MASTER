@@ -105,6 +105,8 @@
                 ✨ Install GOATS App
             </button>
         </div>
+        
+        <p id="pwaStatus" class="text-center small text-white-50 mt-2" style="font-size: 0.7rem;">Checking PWA Status...</p>
     </div>
 </div>
 <script>
@@ -124,7 +126,14 @@ window.onload = function() {
     // Register Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("Service Worker Registered"));
+            .then(() => {
+                document.getElementById('pwaStatus').innerText = "V1.1 | PWA Service Active";
+            })
+            .catch(err => {
+                document.getElementById('pwaStatus').innerText = "SW Error: " + err;
+            });
+    } else {
+        document.getElementById('pwaStatus').innerText = "PWA not supported on this browser";
     }
     // PWA Install Logic
     let deferredPrompt;
