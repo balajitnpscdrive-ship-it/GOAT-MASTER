@@ -135,20 +135,41 @@ window.onload = function() {
         document.getElementById('iosInstallContainer').style.display = 'block';
     }
 };
-// PWA Install Logic (Top Level)
+// --- PWA LOGIC (Top Level for max reliability) ---
 let deferredPrompt;
+// 1. Register Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+        .then(() => {
+            console.log("Service Worker Active");
+            const statusEl = document.getElementById('pwaStatus');
+            if(statusEl) statusEl.innerText = "V1.3 | PWA Service Active";
+        })
+        .catch(err => {
+            console.error("SW Registration Error:", err);
+            const statusEl = document.getElementById('pwaStatus');
+            if(statusEl) statusEl.innerText = "SW Error: " + err;
+        });
+}
+// 2. Listen for Install Prompt (Chrome/Edge/Android)
 window.addEventListener('beforeinstallprompt', (e) => {
-    console.log("SUCCESS: PWA Install Prompt event received!");
+    console.log("SUCCESS: PWA Install event detected by the browser!");
     e.preventDefault();
     deferredPrompt = e;
-    document.getElementById('installContainer').style.display = 'block';
-    document.getElementById('pwaStatus').innerText = "V1.2 | App Install Ready!";
+    const installContainer = document.getElementById('installContainer');
+    const statusEl = document.getElementById('pwaStatus');
+    if(installContainer) installContainer.style.display = 'block';
+    if(statusEl) statusEl.innerText = "V1.3 | ✨ App Install Ready!";
 });
 function handleInstallClick() {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+        alert("The browser hasn't confirmed the app is ready yet. Please wait a few seconds or try interacting with the page.");
+        return;
+    }
     document.getElementById('installContainer').style.display = 'none';
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
+        console.log('User response to install:', choiceResult.outcome);
         deferredPrompt = null;
     });
 }
