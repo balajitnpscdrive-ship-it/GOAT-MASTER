@@ -101,7 +101,7 @@
         </div>
         <!-- PWA Install Button (Chrome/Android) -->
         <div id="installContainer" class="text-center mt-4" style="display: none;">
-            <button id="installBtn" class="btn-db" style="background: var(--gold); color: var(--blue); width: auto; padding: 10px 30px;">
+            <button id="installBtn" onclick="handleInstallClick()" class="btn-db" style="background: var(--gold); color: var(--blue); width: auto; padding: 10px 30px;">
                 ✨ Install GOATS App
             </button>
         </div>
@@ -117,7 +117,7 @@
 </div>
 <script>
 // REPLACE WITH YOUR DEPLOYED GAS WEB APP URL
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyZGvlhMcVDX7WMK-RRRZslE7G0SIPPIrVI6T47mftWl4rbiWFiFRo2GUUmhLe7B2wE/exec";
+const GAS_URL = "YOUR_GAS_WEB_APP_URL_HERE";
 // Check for latest image on page load
 window.onload = function() {
     fetch(`${GAS_URL}?action=getLatestImageId`)
@@ -129,41 +129,29 @@ window.onload = function() {
             }
         })
         .catch(err => console.error("Error fetching image:", err));
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(() => {
-                document.getElementById('pwaStatus').innerText = "V1.1 | PWA Service Active";
-            })
-            .catch(err => {
-                document.getElementById('pwaStatus').innerText = "SW Error: " + err;
-            });
-    } else {
-        document.getElementById('pwaStatus').innerText = "PWA not supported on this browser";
-    }
     // Platform Detection
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
         document.getElementById('iosInstallContainer').style.display = 'block';
     }
-    // PWA Install Logic
-    let deferredPrompt;
-    const installContainer = document.getElementById('installContainer');
-    const installBtn = document.getElementById('installBtn');
-    window.addEventListener('beforeinstallprompt', (e) => {
-        console.log("PWA Install Prompt Ready");
-        e.preventDefault();
-        deferredPrompt = e;
-        installContainer.style.display = 'block';
-        installBtn.addEventListener('click', (e) => {
-            installContainer.style.display = 'none';
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                deferredPrompt = null;
-            });
-        });
-    });
 };
+// PWA Install Logic (Top Level)
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    console.log("SUCCESS: PWA Install Prompt event received!");
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installContainer').style.display = 'block';
+    document.getElementById('pwaStatus').innerText = "V1.2 | App Install Ready!";
+});
+function handleInstallClick() {
+    if (!deferredPrompt) return;
+    document.getElementById('installContainer').style.display = 'none';
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+        deferredPrompt = null;
+    });
+}
 function openLink(placeholder) {
     const urls = {
         'SCOREBOARD_URL': 'https://script.google.com/macros/s/AKfycbwu3kJApbB3t-F5BTNXEgG4i_9cdaZRgJaT0cZXvr1NnTq_5RslRCAbm_5QEiXcLmaw/exec',
