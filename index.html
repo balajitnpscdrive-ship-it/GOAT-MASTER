@@ -109,7 +109,7 @@
 </div>
 <script>
 // REPLACE WITH YOUR DEPLOYED GAS WEB APP URL
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzE8TpuuqJDuVsG8yevj5YtWZ-e-3t13uGDrtWtK7Tc4q7b9US3ercKYPopl52hOvo/exec";
+const GAS_URL = "YOUR_GAS_WEB_APP_URL_HERE";
 // Check for latest image on page load
 window.onload = function() {
     fetch(`${GAS_URL}?action=getLatestImageId`)
@@ -204,10 +204,19 @@ function handleFileUpload() {
                 fileData: fileData
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.result || data.error);
-            location.reload();
+        .then(res => {
+            if (!res.ok) throw new Error("Network response was not ok");
+            return res.text(); // Get as text first to handle potential HTML errors
+        })
+        .then(text => {
+            try {
+                const data = JSON.parse(text);
+                alert(data.result || data.error);
+                location.reload();
+            } catch (e) {
+                console.error("Server returned non-JSON:", text);
+                alert("Server Error: The backend returned an invalid response. Check console for details.");
+            }
         })
         .catch(err => {
             alert("Error uploading: " + err);
