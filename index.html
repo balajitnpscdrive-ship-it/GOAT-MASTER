@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBPC GOATS | Master Hub</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a2a6c">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --gold: #fdbb2d; --blue: #1a2a6c; }
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh; color: white; font-family: 'Poppins', sans-serif; padding: 20px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px; padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            max-width: 1000px; margin: auto;
+        }
+        .img-container { display: flex; justify-content: center; gap: 30px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .circular-img {
+            width: 135px; height: 135px; border-radius: 50%;
+            border: 4px solid var(--gold); background: white;
+            object-fit: cover; box-shadow: 0 10px 25px rgba(253, 187, 45, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .circular-img:hover { transform: scale(1.05); }
+        .college-title { font-weight: 800; text-transform: uppercase; font-size: 2.2rem; background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .motto { color: var(--gold); letter-spacing: 5px; font-weight: bold; font-size: 0.9rem; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: inline-block; padding-top: 10px; }
+        
+        .announcement-box { 
+            background: rgba(253, 187, 45, 0.1); 
+            border: 2px dashed var(--gold); 
+            border-radius: 20px; padding: 15px; margin-bottom: 30px; display: none;
+        }
+        #announcement-img { max-width: 100%; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .nav-card {
+            background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 25px; text-align: center; text-decoration: none;
+            color: white; transition: 0.3s; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .nav-card:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.15); border-color: var(--gold); color: var(--gold); }
+        .icon-lg { font-size: 2.5rem; margin-bottom: 10px; }
+        .login-box { background: rgba(0,0,0,0.4); border-radius: 30px; padding: 30px; border: 1px solid rgba(253, 187, 45, 0.3); margin-top: 40px; }
+        .form-control { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 12px; padding: 12px; }
+        .form-control:focus { background: rgba(255,255,255,0.2); border-color: var(--gold); box-shadow: none; color: white; }
+        .btn-db { background: var(--gold); color: var(--blue); font-weight: 800; border: none; border-radius: 12px; padding: 12px; transition: 0.3s; width: 100%; }
+        .btn-db:hover { background: white; transform: scale(1.02); }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+    <div class="glass-panel animate__animated animate__fadeIn">
+        
+        <div class="text-center mb-5">
+            <div class="img-container animate__animated animate__zoomIn">
+                <img src="https://drive.google.com/thumbnail?id=18pAKHffTYVmymmTmWgJS0S4sAE5XlMfQ&sz=w500" class="circular-img" alt="DBPC Logo">
+                <img src="https://drive.google.com/thumbnail?id=18u-Sxsq8BhRkFCxKeNBh4Pi85M1kmFFi&sz=w500" class="circular-img" alt="Founder">
+            </div>
+            <h1 class="college-title">Don Bosco Polytechnic College</h1>
+            <p class="text-white-50 mb-0">Givers of All Talents Students (GOATS)</p>
+            <div class="motto">TOWARDS EXCELLENCE</div>
+        </div>
+        <div id="announcement-area" class="announcement-box text-center animate__animated animate__backInDown">
+            <p class="small text-uppercase fw-bold" style="color:var(--gold)">📢 Latest Notification</p>
+            <img id="announcement-img" src="" alt="Notification Card">
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-6 col-md-4"><a href="#" onclick="openLink('SCOREBOARD_URL')" class="nav-card"><div class="icon-lg">🏆</div><div class="fw-bold">Scoreboard</div></a></div>
+            <div class="col-6 col-md-4"><a href="#" onclick="openLink('ANALYSIS_URL')" class="nav-card"><div class="icon-lg">📊</div><div class="fw-bold">Analysis</div></a></div>
+            <div class="col-12 col-md-4"><a href="https://balajitnpscdrive-ship-it.github.io/Ultimate-goats/" target="_blank" class="nav-card"><div class="icon-lg">👨🏫</div><div class="fw-bold">Teachers</div></a></div>
+            <div class="col-6 col-md-6"><a href="#" onclick="openLink('CERTIFICATES_URL')" class="nav-card"><div class="icon-lg">📜</div><div class="fw-bold">Certificates</div></a></div>
+            <div class="col-6 col-md-6"><a href="#" onclick="openLink('QRGEN_URL')" class="nav-card"><div class="icon-lg">🛡️</div><div class="fw-bold">QR Gen</div></a></div>
+        </div>
+        <div class="login-box">
+            <h6 class="text-center mb-4 text-uppercase fw-bold" style="color:var(--gold);">Database & Upload Access</h6>
+            <div class="row g-3">
+                <div class="col-md-6"><input type="text" id="adminId" class="form-control" placeholder="Admin ID"></div>
+                <div class="col-md-6"><input type="password" id="adminPw" class="form-control" placeholder="Password"></div>
+                
+                <div class="col-12 mt-3">
+                    <label class="small mb-1 text-white-50">Upload New Invite Card / Notification:</label>
+                    <input type="file" id="imageInput" class="form-control" accept="image/*">
+                    <button id="uploadBtn" onclick="handleFileUpload()" class="btn-db mt-2" style="background: #32cd32; color: #fff;">⬆️ Upload to Dashboard</button>
+                </div>
+                <div class="col-6 mt-3">
+                    <button onclick="authDB('https://docs.google.com/spreadsheets/d/17Fe58xbDoXZQyOV-3rH_GSjDYo3AwsKOwqYRP0MxAuI/edit?usp=sharing')" class="btn-db">QR Sheet</button>
+                </div>
+                <div class="col-6 mt-3">
+                    <button onclick="authDB('https://docs.google.com/spreadsheets/d/1MjEzZikVWtgkpJ8WFGngx22_CePisaU7bWAMccKlye0/edit?usp=sharing')" class="btn-db">Database</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// REPLACE WITH YOUR DEPLOYED GAS WEB APP URL
+const GAS_URL = "YOUR_GAS_WEB_APP_URL_HERE";
+// Check for latest image on page load
+window.onload = function() {
+    fetch(`${GAS_URL}?action=getLatestImageId`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.id) {
+                document.getElementById('announcement-img').src = "https://drive.google.com/thumbnail?id=" + data.id + "&sz=w1000";
+                document.getElementById('announcement-area').style.display = "block";
+            }
+        })
+        .catch(err => console.error("Error fetching image:", err));
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("Service Worker Registered"));
+    }
+};
+function openLink(placeholder) {
+    const urls = {
+        'SCOREBOARD_URL': 'https://script.google.com/macros/s/AKfycbwu3kJApbB3t-F5BTNXEgG4i_9cdaZRgJaT0cZXvr1NnTq_5RslRCAbm_5QEiXcLmaw/exec',
+        'ANALYSIS_URL': 'https://script.google.com/macros/s/AKfycbzkay3P2EJZWykmlHsE7VUPSZZwgG0Bvf8xlCw3WrKv3e0eKunSsVlMU8JC5_8_9sLPdA/exec',
+        'CERTIFICATES_URL': 'https://script.google.com/macros/s/AKfycbxOmPaJuwC38PE3qBKG--MYOYvcWXIYaP-BJyMMYxDHyTkKb1S5PdDWz1lntaLK465SSA/exec',
+        'QRGEN_URL': 'https://script.google.com/macros/s/AKfycbysMaaksrbe-HxtMGlGonizg3O16WwXinAsnV1l5PVqvMUnJZBEEGJ8lFbiDWvEGBKM/exec'
+    };
+    window.open(urls[placeholder], '_blank');
+}
+function authDB(url) {
+    const id = document.getElementById('adminId').value;
+    const pw = document.getElementById('adminPw').value;
+    if (id === "donbosco" && pw === "goats2026") {
+        window.open(url, '_blank');
+    } else {
+        alert("Access Denied!");
+    }
+}
+function handleFileUpload() {
+    const id = document.getElementById('adminId').value;
+    const pw = document.getElementById('adminPw').value;
+    
+    if (id !== "donbosco" || pw !== "goats2026") {
+        alert("Login required to upload images!");
+        return;
+    }
+    const fileInput = document.getElementById('imageInput');
+    if (fileInput.files.length === 0) {
+        alert("Please select an image file first.");
+        return;
+    }
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const fileData = {
+            fileName: file.name,
+            mimeType: file.type,
+            data: e.target.result.split(',')[1]
+        };
+        const btn = document.getElementById('uploadBtn');
+        btn.innerText = "Uploading...";
+        btn.disabled = true;
+        fetch(GAS_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                action: "uploadNotification",
+                fileData: fileData
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.result || data.error);
+            location.reload();
+        })
+        .catch(err => {
+            alert("Error uploading: " + err);
+            btn.innerText = "Upload to Dashboard";
+            btn.disabled = false;
+        });
+    };
+    reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>
