@@ -1,0 +1,17 @@
+{
+  "name": "DBPC GOATS | Master Hub",
+  "short_name": "GOATS Hub",
+  "description": "The central hub for Don Bosco Polytechnic College Students.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f0c29",
+  "theme_color": "#1a2a6c",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
