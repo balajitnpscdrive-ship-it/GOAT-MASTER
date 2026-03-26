@@ -33,7 +33,7 @@
             transition: transform 0.3s ease;
         }
         .circular-img:hover { transform: scale(1.05); }
-        .college-title { font-weight: 800; text-transform: uppercase; font-size: 2.2rem; background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .college-title { font-weight: 800; text-transform: uppercase; font-size: 2.2rem; background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .motto { color: var(--gold); letter-spacing: 5px; font-weight: bold; font-size: 0.9rem; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: inline-block; padding-top: 10px; }
         
         .announcement-box { 
@@ -99,6 +99,12 @@
                 </div>
             </div>
         </div>
+        <!-- PWA Install Button -->
+        <div id="installContainer" class="text-center mt-4" style="display: none;">
+            <button id="installBtn" class="btn-db" style="background: var(--gold); color: var(--blue); width: auto; padding: 10px 30px;">
+                ✨ Install GOATS App
+            </button>
+        </div>
     </div>
 </div>
 <script>
@@ -120,6 +126,33 @@ window.onload = function() {
         navigator.serviceWorker.register('sw.js')
             .then(() => console.log("Service Worker Registered"));
     }
+    // PWA Install Logic
+    let deferredPrompt;
+    const installContainer = document.getElementById('installContainer');
+    const installBtn = document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI notify the user they can install the PWA
+        installContainer.style.display = 'block';
+        installBtn.addEventListener('click', (e) => {
+            // hide our install UI
+            installContainer.style.display = 'none';
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+            });
+        });
+    });
 };
 function openLink(placeholder) {
     const urls = {
