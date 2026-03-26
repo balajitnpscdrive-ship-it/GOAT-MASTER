@@ -1,3 +1,9 @@
+
+index.html
+goats-pwa
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,50 +135,54 @@ window.onload = function() {
             }
         })
         .catch(err => console.error("Error fetching image:", err));
-    // Platform Detection
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-        document.getElementById('iosInstallContainer').style.display = 'block';
-    }
-};
-// --- PWA LOGIC (Top Level for max reliability) ---
-let deferredPrompt;
-// 1. Register Service Worker
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        .then(() => {
-            console.log("Service Worker Active");
-            const statusEl = document.getElementById('pwaStatus');
-            if(statusEl) statusEl.innerText = "V1.3 | PWA Service Active";
-        })
-        .catch(err => {
-            console.error("SW Registration Error:", err);
-            const statusEl = document.getElementById('pwaStatus');
-            if(statusEl) statusEl.innerText = "SW Error: " + err;
-        });
-}
-// 2. Listen for Install Prompt (Chrome/Edge/Android)
-window.addEventListener('beforeinstallprompt', (e) => {
-    console.log("SUCCESS: PWA Install event detected by the browser!");
-    e.preventDefault();
-    deferredPrompt = e;
-    const installContainer = document.getElementById('installContainer');
+function initPWA() {
+    console.log("PWA Initialization Started...");
     const statusEl = document.getElementById('pwaStatus');
-    if(installContainer) installContainer.style.display = 'block';
-    if(statusEl) statusEl.innerText = "V1.3 | ✨ App Install Ready!";
-});
+    const installContainer = document.getElementById('installContainer');
+    const iosInstallContainer = document.getElementById('iosInstallContainer');
+    // 1. Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS && iosInstallContainer) {
+        iosInstallContainer.style.display = 'block';
+    }
+    // 2. Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => {
+                console.log("Service Worker Registered Successfully");
+                if (statusEl) statusEl.innerText = "V1.4 | Service Active";
+            })
+            .catch(err => {
+                console.error("Service Worker Failed:", err);
+                if (statusEl) statusEl.innerText = "Service Error: " + err.message;
+            });
+    } else {
+        if (statusEl) statusEl.innerText = "PWA not supported on this browser";
+    }
+    // 3. Listen for Install Prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+        console.log("Browser ready for PWA Installation!");
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installContainer) installContainer.style.display = 'block';
+        if (statusEl) statusEl.innerText = "V1.4 | ✨ Install Button Ready!";
+    });
+}
+// Global variable for the prompt
+let deferredPrompt;
 function handleInstallClick() {
     if (!deferredPrompt) {
-        alert("The browser hasn't confirmed the app is ready yet. Please wait a few seconds or try interacting with the page.");
+        alert("Wait a few seconds for the app to finish loading, then try again.");
         return;
     }
     document.getElementById('installContainer').style.display = 'none';
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-        console.log('User response to install:', choiceResult.outcome);
+    deferredPrompt.userChoice.then(() => {
         deferredPrompt = null;
     });
 }
+// Run PWA Init immediately
+initPWA();
 function openLink(placeholder) {
     const urls = {
         'SCOREBOARD_URL': 'https://script.google.com/macros/s/AKfycbwu3kJApbB3t-F5BTNXEgG4i_9cdaZRgJaT0cZXvr1NnTq_5RslRCAbm_5QEiXcLmaw/exec',
@@ -246,5 +256,3 @@ function handleFileUpload() {
     reader.readAsDataURL(file);
 }
 </script>
-</body>
-</html>
